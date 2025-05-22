@@ -9,7 +9,6 @@
   <!-- Button -->
   <div><em><button id="checkout-button" type="button" class="btn make-buttons">Pay $199</button></em></div>
 
-  <script src="https://js.stripe.com/v3/ "></script>
   <script>
     document.getElementById('checkout-button').addEventListener('click', function () {
       // Extract the HLAuthToken from the browser cookies
@@ -54,7 +53,7 @@
 
           // URL of the backend endpoint that creates a Stripe Checkout Session
           // This should point to your server-side API
-          const createCheckoutSessionUrl = 'https://yodlpaidmembershipuat.azurewebsites.net/api/CreateCheckoutSession';
+          const createCheckoutSessionUrl = 'https://yodlpaidmembershipuat.azurewebsites.net/api/CreateCheckoutSessionUAT';
 
           // Send POST request to backend to create a new checkout session
           fetch(createCheckoutSessionUrl, {
@@ -67,12 +66,10 @@
           // Parse the response as JSON
           .then(res => res.json())
           .then(session => {
-            // Load Stripe.js using your publishable key
-            const stripePublicKey = 'pk_test_51REWdDGfJJQlVOB8jMf8f5D02qovpC790QOHz7vMNkrJvYqcBQrIRASIfqTt4htKYqQ1mCYR8bdJr4DWDdWf4BT600pUuhURBT';
-            const stripe = Stripe(stripePublicKey);
-
-            // Redirect the user to the Stripe Checkout page with the session ID
-            return stripe.redirectToCheckout({ sessionId: session.id });
+            // Redirige directamente a la URL recibida del backend
+            if (session.url) {
+              window.location.href = session.url;
+            }
           })
           // Handle any errors during the fetch or redirect process
           .catch(err => {
