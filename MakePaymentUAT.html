@@ -7,80 +7,96 @@
 <body>
 
   <!-- Button -->
-  <div><em><button id="checkout-button" type="button" class="btn make-buttons">Pay $199</button></em></div>
+  <div><em><button id="checkout-button" type="button" class="btn make-buttons">Pay $1</button></em></div>
 
   <script>
-    document.getElementById('checkout-button').addEventListener('click', function () {
-      // Extract the HLAuthToken from the browser cookies
-      const authToken = document.cookie.split('; ').find(c => c.startsWith('HLAuthToken='))?.split('=')[1];
-      // Hardcoded HLIAMKey required for authentication with the API
-      const iamKey = '0e6106a1-7a50-cbc8-f791-60852b4dd769';
-      // Only proceed if we found a valid authToken
-      if (authToken) {
-        // Prepare headers for the fetch request
-        const headers = {
-          'Content-Type': 'application/json',
-          'HLIAMKey': iamKey,       // Authentication key required by the API
-          'HLAuthToken': authToken   // Auth token used to identify the user session
-        };
+    document.addEventListener('DOMContentLoaded', () => {
+      const EnableButton = (button) => {
+        button.disabled = false;
+        button.textContent = "Pay $1";
+      };
 
-        // Make a GET request to the GetWhoAmI endpoint
-        fetch('https://api.connectedcommunity.org/api/v2.0/Contacts/GetWhoAmI ', {
-          method: 'GET',
-          headers: headers
-        })
-        .then(response => {
-          // If response is OK (status 200-299), parse JSON response
-          if (response.ok) {
-            return response.json();
-          }
-          // Else, do nothing (no handling needed for errors at this stage)
-        })
-        .then(data => {
-          // Extract relevant contact info from the response
-          const contactKey = data.ContactKey;
-          const emailAddress = data.EmailAddress;
+      const DisableButton = (button) => {
+        button.disabled = true;
+        button.textContent = "Processing...";
+      };
 
-          // User data required to create a checkout session
-          // This typically includes user identification and authentication details
-          const userData = {
-            contactKey: contactKey,
-            emailAddress: emailAddress,
-            authToken: authToken,
-            amount: '19900',
-            currency: 'cad'
+      document.getElementById('checkout-button').addEventListener('click', function () {
+        // Disable the button to prevent multiple clicks 
+        const button = this;
+        DisableButton(button);
+
+        // Extract the HLAuthToken from the browser cookies
+        const authToken = document.cookie.split('; ').find(c => c.startsWith('HLAuthToken='))?.split('=')[1];
+        // Hardcoded HLIAMKey required for authentication with the API
+        const iamKey = '0e6106a1-7a50-cbc8-f791-60852b4dd769';
+        // Only proceed if we found a valid authToken
+        if (authToken) {
+          // Prepare headers for the fetch request
+          const headers = {
+            'Content-Type': 'application/json',
+            'HLIAMKey': iamKey,       // Authentication key required by the API
+            'HLAuthToken': authToken   // Auth token used to identify the user session
           };
 
-          // URL of the backend endpoint that creates a Stripe Checkout Session
-          // This should point to your server-side API
-          const createCheckoutSessionUrl = 'https://yodlpaidmembershipuat.azurewebsites.net/api/CreateCheckoutSessionUAT';
+          // Make a GET request to the GetWhoAmI endpoint
+          fetch('https://api.connectedcommunity.org/api/v2.0/Contacts/GetWhoAmI ', {
+            method: 'GET',
+            headers: headers
+          })
+          .then(response => response.ok ? response.json() : null)
+          .then(data => {
+            if (!data) { return EnableButton(button); }
+            // Extract relevant contact info from the response
+            const contactKey = data.ContactKey;
+            const emailAddress = data.EmailAddress;
+            const displayName = data.DisplayName || data.FirstName || "";
 
-          // Send POST request to backend to create a new checkout session
-          fetch(createCheckoutSessionUrl, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(userData)
+            // User data required to create a checkout session
+            // This typically includes user identification and authentication details
+            const userData = {
+              displayName: displayName,
+              contactKey: contactKey,
+              emailAddress: emailAddress,
+              authToken: authToken,
+              priceId: "price_1REX4mGfJJQlVOB8jzxq4sIe" // Price ID for the product being purchased UAT
+            };
+
+            // URL of the backend endpoint that creates a Stripe Checkout Session
+            // This should point to your server-side API
+            const createCheckoutSessionUrl = 'https://yodlpaidmembershipuat.azurewebsites.net/api/CreateCheckoutSessionUAT';
+
+            // Send POST request to backend to create a new checkout session
+            fetch(createCheckoutSessionUrl, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify(userData)
+            })
+            // Parse the response as JSON
+            .then(res => res.json())
+            .then(session => {
+              // Redirect directly to the URL received from the backend
+              if (session.url) {
+                window.location.href = session.url;
+              } else {
+                return EnableButton(button);
+              }
+            })
+            // Handle any errors during the fetch or redirect process
+            .catch(err => {
+              // Re-enable the button if there's an error
+              return EnableButton(button);
+            });
           })
-          // Parse the response as JSON
-          .then(res => res.json())
-          .then(session => {
-            // Redirige directamente a la URL recibida del backend
-            if (session.url) {
-              window.location.href = session.url;
-            }
-          })
-          // Handle any errors during the fetch or redirect process
-          .catch(err => {
-            // Catch and ignore any network or fetch errors (no action required)
+          .catch(error => {
+            // Re-enable the button if there's an error
+            return EnableButton(button);
           });
-        })
-        .catch(error => {
-          // Catch and ignore any network or fetch errors (no action required)
-        });
-      }
-    });
+        }
+      });
+    });    
   </script>
 
 </body>
