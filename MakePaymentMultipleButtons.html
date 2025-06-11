@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Make a payment</title>
+</head>
+<body>
+
+  <!-- Payment button for $1 -->
+  <div><em><button id="checkout-button" type="button" class="btn make-buttons">Pay $1</button></em></div>
+
+  <!-- Payment button for $5 -->
+  <div><em><button id="checkout-button-2" type="button" class="btn make-buttons">Pay $5</button></em></div>
+
+  <script>
+    // Wait until the page is fully loaded
+    document.addEventListener('DOMContentLoaded', () => {
+
+      // Get references to both buttons
+      const button1 = document.getElementById('checkout-button');
+      const button2 = document.getElementById('checkout-button-2');
+
+      // Function to enable a button and set its label
+      const EnableButton = (button, label = "Pay $1") => {
+        button.disabled = false;
+        button.textContent = label;
+      };
+
+      // Function to disable a button and show "Processing..."
+      const DisableButton = (button) => {
+        button.disabled = true;
+        button.textContent = "Processing...";
+      };
+
+      // Event listener for the $1 payment button
+      button1.addEventListener('click', function () {
+        const button = this;
+        DisableButton(button); // Disable this button while processing
+        button2.disabled = true; // Also disable the other button
+
+        // Get the authentication token from cookies
+        const authToken = document.cookie.split('; ').find(c => c.startsWith('HLAuthToken='))?.split('=')[1];
+        if (authToken) {
+          // Prepare the data to send to the server
+          const userData = {
+            authToken: authToken,
+            priceId: "price_1RTpp8Gw6MO6ihUlFx9OJGmH", // Stripe price ID for $1
+            locale: document.documentElement.lang || "en"
+          };
+          // URL of the backend API to create a checkout session
+          const createCheckoutSessionUrl = 'https://yodlpaidmembership.azurewebsites.net/api/CreateCheckoutSession';
+          // Send the payment request to the server
+          fetch(createCheckoutSessionUrl, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(userData)
+          })
+          .then(res => res.json())
+          .then(session => {
+            // If the server returns a URL, redirect the user to Stripe checkout
+            if (session.url) {
+              window.location.href = session.url;
+            } else {
+              // If something goes wrong, re-enable both buttons
+              EnableButton(button, "Pay $1");
+              EnableButton(button2, "Pay $5");
+            }
+          })
+          .catch(err => {
+            // If there is an error, re-enable both buttons
+            EnableButton(button, "Pay $1");
+            EnableButton(button2, "Pay $5");
+          });
+        }
+      });
+
+      // Event listener for the $5 payment button
+      button2.addEventListener('click', function () {
+        const button = this;
+        DisableButton(button); // Disable this button while processing
+        button1.disabled = true; // Also disable the other button
+
+        // Get the authentication token from cookies
+        const authToken = document.cookie.split('; ').find(c => c.startsWith('HLAuthToken='))?.split('=')[1];
+        if (authToken) {
+          // Prepare the data to send to the server
+          const userData = {
+            authToken: authToken,
+            priceId: "price_2EXAMPLEFOR5USD", // Stripe price ID for $5
+            locale: document.documentElement.lang || "en"
+          };
+          // URL of the backend API to create a checkout session
+          const createCheckoutSessionUrl = 'https://yodlpaidmembership.azurewebsites.net/api/CreateCheckoutSession';
+          // Send the payment request to the server
+          fetch(createCheckoutSessionUrl, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(userData)
+          })
+          .then(res => res.json())
+          .then(session => {
+            // If the server returns a URL, redirect the user to Stripe checkout
+            if (session.url) {
+              window.location.href = session.url;
+            } else {
+              // If something goes wrong, re-enable both buttons
+              EnableButton(button, "Pay $5");
+              EnableButton(button1, "Pay $1");
+            }
+          })
+          .catch(err => {
+            // If there is an error, re-enable both buttons
+            EnableButton(button, "Pay $5");
+            EnableButton(button1, "Pay $1");
+          });
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>
