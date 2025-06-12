@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Make a payment</title>
+</head>
+<body>
+
+  <!-- Payment button 1 -->
+  <div><em><button id="checkout-button-upgrade-1" type="button" class="btn make-buttons"></button></em></div>
+
+  <!-- Payment button 2 -->
+  <div><em><button id="checkout-button-upgrade-2" type="button" class="btn make-buttons"></button></em></div>
+
+  <!-- Payment button 3 -->
+  <div><em><button id="checkout-button-upgrade-3" type="button" class="btn make-buttons"></button></em></div>
+
+  <script>
+    // Wait until the page is fully loaded
+    document.addEventListener('DOMContentLoaded', () => {
+
+      // Get references to all three buttons
+      const button1 = document.getElementById('checkout-button-upgrade-1');
+      const button2 = document.getElementById('checkout-button-upgrade-2');
+      const button3 = document.getElementById('checkout-button-upgrade-3');
+
+      // Initial text for the buttons
+      const textButton1 = "Upgrade Now";
+      const textButton2 = "Upgrade Now";
+      const textButton3 = "Upgrade Now";
+
+      // Set the initial text for all buttons
+      button1.textContent = textButton1;
+      button2.textContent = textButton2;
+      button3.textContent = textButton3;
+
+      // Function to enable a button and set its label
+      const EnableButton = (button, label) => {
+        button.disabled = false;
+        button.textContent = label;
+      };
+
+      // Function to disable a button and show "Processing..."
+      const DisableButton = (button) => {
+        button.disabled = true;
+        button.textContent = "Processing...";
+      };
+
+      // Helper to disable all buttons except the one clicked
+      const disableOtherButtons = (clicked, others) => {
+        others.forEach(btn => btn.disabled = true);
+      };
+
+      // Event listener for the $1 payment button
+      button1.addEventListener('click', function () {
+        const button = this;
+        DisableButton(button);
+        disableOtherButtons(button, [button2, button3]);
+
+        const authToken = document.cookie.split('; ').find(c => c.startsWith('HLAuthToken='))?.split('=')[1];
+        if (authToken) {
+          const userData = {
+            authToken: authToken,
+            priceId: "price_1RTpp8Gw6MO6ihUlFx9OJGmH", // Stripe price ID for $1
+            locale: document.documentElement.lang || "en"
+          };
+          const createCheckoutSessionUrl = 'https://yodlpaidmembership.azurewebsites.net/api/CreateCheckoutSession';
+          fetch(createCheckoutSessionUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(userData)
+          })
+          .then(res => res.json())
+          .then(session => {
+            if (session.url) {
+              window.location.href = session.url;
+            } else {
+              EnableButton(button, textButton1);
+              EnableButton(button2, textButton2);
+              EnableButton(button3, textButton3);
+            }
+          })
+          .catch(err => {
+            EnableButton(button, textButton1);
+            EnableButton(button2, textButton2);
+            EnableButton(button3, textButton3);
+          });
+        }
+      });
+
+      // Event listener for the $5 payment button
+      button2.addEventListener('click', function () {
+        const button = this;
+        DisableButton(button);
+        disableOtherButtons(button, [button1, button3]);
+
+        const authToken = document.cookie.split('; ').find(c => c.startsWith('HLAuthToken='))?.split('=')[1];
+        if (authToken) {
+          const userData = {
+            authToken: authToken,
+            priceId: "price_1RTpp8Gw6MO6ihUlFx9OJGmH", // Stripe price ID for $5
+            locale: document.documentElement.lang || "en"
+          };
+          const createCheckoutSessionUrl = 'https://yodlpaidmembership.azurewebsites.net/api/CreateCheckoutSession';
+          fetch(createCheckoutSessionUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(userData)
+          })
+          .then(res => res.json())
+          .then(session => {
+            if (session.url) {
+              window.location.href = session.url;
+            } else {
+              EnableButton(button, textButton2);
+              EnableButton(button1, textButton1);
+              EnableButton(button3, textButton3);
+            }
+          })
+          .catch(err => {
+            EnableButton(button, textButton2);
+            EnableButton(button1, textButton1);
+            EnableButton(button3, textButton3);
+          });
+        }
+      });
+
+      // Event listener for the $10 payment button
+      button3.addEventListener('click', function () {
+        const button = this;
+        DisableButton(button);
+        disableOtherButtons(button, [button1, button2]);
+
+        const authToken = document.cookie.split('; ').find(c => c.startsWith('HLAuthToken='))?.split('=')[1];
+        if (authToken) {
+          const userData = {
+            authToken: authToken,
+            priceId: "price_1RTpp8Gw6MO6ihUlFx9OJGmH", // Stripe price ID for $10 (replace with correct ID)
+            locale: document.documentElement.lang || "en"
+          };
+          const createCheckoutSessionUrl = 'https://yodlpaidmembership.azurewebsites.net/api/CreateCheckoutSession';
+          fetch(createCheckoutSessionUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(userData)
+          })
+          .then(res => res.json())
+          .then(session => {
+            if (session.url) {
+              window.location.href = session.url;
+            } else {
+              EnableButton(button, textButton3);
+              EnableButton(button1, textButton1);
+              EnableButton(button2, textButton2);
+            }
+          })
+          .catch(err => {
+            EnableButton(button, textButton3);
+            EnableButton(button1, textButton1);
+            EnableButton(button2, textButton2);
+          });
+        }
+      });
+
+    });
+  </script>
+
+</body>
+</html>
