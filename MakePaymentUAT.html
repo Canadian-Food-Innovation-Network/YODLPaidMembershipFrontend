@@ -33,7 +33,8 @@
           const userData = {
             authToken: authToken,
             priceId: "price_1REX4mGfJJQlVOB8jzxq4sIe", // Price ID for the product being purchased UAT
-            locale: document.documentElement.lang || "en"
+            locale: document.documentElement.lang || "en",
+            currentUrl: window.location.href // Add current URL
           };
 
           // URL of the backend endpoint that creates a Stripe Checkout Session

@@ -54,7 +54,8 @@
           const userData = {
             authToken: authToken,
             priceId: "price_1RTpp8Gw6MO6ihUlFx9OJGmH", // Stripe price ID for $1
-            locale: document.documentElement.lang || "en"
+            locale: document.documentElement.lang || "en",
+            currentUrl: window.location.href // Add current URL
           };
           // URL of the backend API to create a checkout session
           const createCheckoutSessionUrl = 'https://yodlpaidmembership.azurewebsites.net/api/CreateCheckoutSession';
@@ -98,7 +99,8 @@
           const userData = {
             authToken: authToken,
             priceId: "price_1RTpp8Gw6MO6ihUlFx9OJGmH", // Stripe price ID for $5
-            locale: document.documentElement.lang || "en"
+            locale: document.documentElement.lang || "en",
+            currentUrl: window.location.href // Add current URL
           };
           // URL of the backend API to create a checkout session
           const createCheckoutSessionUrl = 'https://yodlpaidmembership.azurewebsites.net/api/CreateCheckoutSession';
