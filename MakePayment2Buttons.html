@@ -130,6 +130,31 @@
           });
         }
       });
+      // Register Plus Opt-Out
+      if (document.referrer == 'https://checkout.stripe.com/') {
+        // Extract the HLAuthToken from the browser cookies
+        const authToken = document.cookie.split('; ').find(c => c.startsWith('HLAuthToken='))?.split('=')[1];
+        // Only proceed if we found a valid authToken
+        if (authToken) {
+          // User data required to register Plus Opt-Out
+          const userData = {
+            authToken: authToken
+          };
+
+          // URL of the backend endpoint that register Plus Opt-Out
+          // This should point to your server-side API
+          const registerPlusOptOutUrl = 'https://yodlpaidmembership.azurewebsites.net/api/RegisterPlusOptOut';
+
+          // Send POST request to backend to register Plus Opt-Out
+          fetch(registerPlusOptOutUrl, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(userData)
+          });
+        }
+      }
     });
   </script>
 
