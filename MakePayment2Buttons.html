@@ -7,10 +7,10 @@
 <body>
 
   <!-- Payment button for $1 -->
-  <div><em><button id="checkout-button-upgrade-1" type="button" class="btn make-buttons"></button></em></div>
+  <div><em><button id="checkout-button-upgrade-1" type="button" class="btn make-buttons">Upgrade to CFIN+</button></em></div>
 
   <!-- Payment button for $5 -->
-  <div><em><button id="checkout-button-upgrade-2" type="button" class="btn make-buttons"></button></em></div>
+  <div><em><button id="checkout-button-upgrade-2" type="button" class="btn make-buttons">Upgrade to CFIN+</button></em></div>
 
   <script>
     // Wait until the page is fully loaded
@@ -53,7 +53,7 @@
           // Prepare the data to send to the server
           const userData = {
             authToken: authToken,
-            priceId: "price_1RTpp8Gw6MO6ihUlFx9OJGmH", // Stripe price ID for $1
+            priceId: "price_1RgrEAGw6MO6ihUlhDnUOj3G", // Price ID for the product being purchased production
             locale: document.documentElement.lang || "en",
             currentUrl: window.location.href // Add current URL
           };
@@ -98,7 +98,7 @@
           // Prepare the data to send to the server
           const userData = {
             authToken: authToken,
-            priceId: "price_1RTpp8Gw6MO6ihUlFx9OJGmH", // Stripe price ID for $5
+            priceId: "price_1RgrEAGw6MO6ihUlhDnUOj3G", // Price ID for the product being purchased production
             locale: document.documentElement.lang || "en",
             currentUrl: window.location.href // Add current URL
           };
