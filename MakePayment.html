@@ -34,7 +34,7 @@
             authToken: authToken,
             priceId: "price_1RgrEAGw6MO6ihUlhDnUOj3G", // Price ID for the product being purchased production
             locale: document.documentElement.lang || "en",
-            currentUrl: window.location.href // Add current URL
+            currentUrl: window.location.href.split('?')[0] // Clean URL without query parameters
           };
 
           // URL of the backend endpoint that creates a Stripe Checkout Session
