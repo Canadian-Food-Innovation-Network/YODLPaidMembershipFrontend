@@ -66,7 +66,7 @@
             authToken: authToken,
             priceId: priceId1, // Use priceId1 from URL parameter or default
             locale: document.documentElement.lang || "en",
-            currentUrl: window.location.href.split('?')[0] // Clean URL without query parameters
+            currentUrl: window.location.href // Add current URL
           };
           // URL of the backend API to create a checkout session
           const createCheckoutSessionUrl = 'https://yodlpaidmembership.azurewebsites.net/api/CreateCheckoutSession';
@@ -111,7 +111,7 @@
             authToken: authToken,
             priceId: priceId2, // Use priceId2 from URL parameter or default
             locale: document.documentElement.lang || "en",
-            currentUrl: window.location.href.split('?')[0] // Clean URL without query parameters
+            currentUrl: window.location.href // Add current URL
           };
           // URL of the backend API to create a checkout session
           const createCheckoutSessionUrl = 'https://yodlpaidmembership.azurewebsites.net/api/CreateCheckoutSession';

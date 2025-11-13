@@ -43,7 +43,7 @@
             authToken: authToken,
             priceId: priceId, // Use priceId from URL parameter or UAT default
             locale: document.documentElement.lang || "en",
-            currentUrl: window.location.href.split('?')[0] // Clean URL without query parameters
+            currentUrl: window.location.href // Add current URL
           };
 
           // URL of the backend endpoint that creates a Stripe Checkout Session

@@ -75,7 +75,7 @@
             authToken: authToken,
             priceId: priceId1, // Use priceId1 from URL parameter or default
             locale: document.documentElement.lang || "en",
-            currentUrl: window.location.href.split('?')[0] // Clean URL without query parameters
+            currentUrl: window.location.href // Add current URL
           };
           const createCheckoutSessionUrl = 'https://yodlpaidmembership.azurewebsites.net/api/CreateCheckoutSession';
           fetch(createCheckoutSessionUrl, {
@@ -113,7 +113,7 @@
             authToken: authToken,
             priceId: priceId2, // Use priceId2 from URL parameter or default
             locale: document.documentElement.lang || "en",
-            currentUrl: window.location.href.split('?')[0] // Clean URL without query parameters
+            currentUrl: window.location.href // Add current URL
           };
           const createCheckoutSessionUrl = 'https://yodlpaidmembership.azurewebsites.net/api/CreateCheckoutSession';
           fetch(createCheckoutSessionUrl, {
@@ -151,7 +151,7 @@
             authToken: authToken,
             priceId: priceId3, // Use priceId3 from URL parameter or default
             locale: document.documentElement.lang || "en",
-            currentUrl: window.location.href.split('?')[0] // Clean URL without query parameters
+            currentUrl: window.location.href // Add current URL
           };
           const createCheckoutSessionUrl = 'https://yodlpaidmembership.azurewebsites.net/api/CreateCheckoutSession';
           fetch(createCheckoutSessionUrl, {
