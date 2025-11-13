@@ -10,7 +10,16 @@
   <div><em><button id="checkout-button" type="button" class="btn make-buttons">Upgrade to CFIN+</button></em></div>
 
   <script>
+    // Function to get URL parameters
+    const getUrlParameter = (name) => {
+      const urlParams = new URLSearchParams(window.location.search);
+      return urlParams.get(name);
+    };
+
     document.addEventListener('DOMContentLoaded', () => {
+      // Get priceId from URL parameter or use UAT default
+      const priceId = getUrlParameter('priceId') || "price_1REX4mGfJJQlVOB8jzxq4sIe";
+
       const EnableButton = (button) => {
         button.disabled = false;
         button.textContent = "Upgrade to CFIN+";
@@ -32,7 +41,7 @@
           // User data required to create a checkout session
           const userData = {
             authToken: authToken,
-            priceId: "price_1REX4mGfJJQlVOB8jzxq4sIe", // Price ID for the product being purchased UAT
+            priceId: priceId, // Use priceId from URL parameter or UAT default
             locale: document.documentElement.lang || "en",
             currentUrl: window.location.href.split('?')[0] // Clean URL without query parameters
           };

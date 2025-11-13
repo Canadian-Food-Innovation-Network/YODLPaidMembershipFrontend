@@ -16,8 +16,20 @@
   <div><em><button id="checkout-button-upgrade-3" type="button" class="btn make-buttons">Upgrade to CFIN+</button></em></div>
 
   <script>
+    // Function to get URL parameters
+    const getUrlParameter = (name) => {
+      const urlParams = new URLSearchParams(window.location.search);
+      return urlParams.get(name);
+    };
+
     // Wait until the page is fully loaded
     document.addEventListener('DOMContentLoaded', () => {
+
+      // Get priceId from URL parameters
+      const priceIdFromUrl = getUrlParameter('priceId');
+      const priceId1 = getUrlParameter('priceId1') || priceIdFromUrl || "price_1ST1pwGw6MO6ihUlDQp5bdg9"; // Default fallback
+      const priceId2 = getUrlParameter('priceId2') || priceIdFromUrl || "price_1ST1pwGw6MO6ihUlDQp5bdg9"; // Default fallback
+      const priceId3 = getUrlParameter('priceId3') || priceIdFromUrl || "price_1ST1pwGw6MO6ihUlDQp5bdg9"; // Default fallback
 
       // Get references to all three buttons
       const button1 = document.getElementById('checkout-button-upgrade-1');
@@ -61,7 +73,7 @@
         if (authToken) {
           const userData = {
             authToken: authToken,
-            priceId: "price_1ST1pwGw6MO6ihUlDQp5bdg9", // Price ID for the product being purchased production
+            priceId: priceId1, // Use priceId1 from URL parameter or default
             locale: document.documentElement.lang || "en",
             currentUrl: window.location.href.split('?')[0] // Clean URL without query parameters
           };
@@ -99,7 +111,7 @@
         if (authToken) {
           const userData = {
             authToken: authToken,
-            priceId: "price_1ST1pwGw6MO6ihUlDQp5bdg9", // Price ID for the product being purchased production
+            priceId: priceId2, // Use priceId2 from URL parameter or default
             locale: document.documentElement.lang || "en",
             currentUrl: window.location.href.split('?')[0] // Clean URL without query parameters
           };
@@ -137,7 +149,7 @@
         if (authToken) {
           const userData = {
             authToken: authToken,
-            priceId: "price_1ST1pwGw6MO6ihUlDQp5bdg9", // Price ID for the product being purchased production
+            priceId: priceId3, // Use priceId3 from URL parameter or default
             locale: document.documentElement.lang || "en",
             currentUrl: window.location.href.split('?')[0] // Clean URL without query parameters
           };
