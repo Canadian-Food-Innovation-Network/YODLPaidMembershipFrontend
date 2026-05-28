@@ -36,11 +36,11 @@
         DisableButton(button);
         // Extract the HLAuthToken from the browser cookies
         const authToken = document.cookie.split('; ').find(c => c.startsWith('HLAuthToken='))?.split('=')[1];
-        // Only proceed if we found a valid authToken
-        if (authToken) {
+        // Deprecated: Only proceed if we found a valid authToken
+        //if (authToken) {
           // User data required to create a checkout session
           const userData = {
-            authToken: authToken,
+            authToken: authToken || null, // Pass null if authToken is not found
             priceId: priceId, // Use priceId from URL parameter or UAT default
             locale: document.documentElement.lang || "en",
             currentUrl: window.location.href // Add current URL
@@ -73,7 +73,7 @@
             // Re-enable the button if there's an error
             return EnableButton(button);
           });
-        }
+        //} // End of authToken check
       });  
       // Register Plus Opt-Out
       if (document.referrer == 'https://checkout.stripe.com/') {

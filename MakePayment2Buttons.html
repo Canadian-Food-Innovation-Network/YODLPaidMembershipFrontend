@@ -60,10 +60,11 @@
 
         // Get the authentication token from cookies
         const authToken = document.cookie.split('; ').find(c => c.startsWith('HLAuthToken='))?.split('=')[1];
-        if (authToken) {
+                // Deprecated: Only proceed if we found a valid authToken
+        //if (authToken) {
           // Prepare the data to send to the server
           const userData = {
-            authToken: authToken,
+            authToken: authToken || null, // Pass null if authToken is not found
             priceId: priceId1, // Use priceId1 from URL parameter or default
             locale: document.documentElement.lang || "en",
             currentUrl: window.location.href // Add current URL
@@ -94,7 +95,7 @@
             EnableButton(button, textButton1);
             EnableButton(button2, textButton2);
           });
-        }
+        //} // End of authToken check
       });
 
       // Event listener for the $5 payment button
@@ -105,10 +106,11 @@
 
         // Get the authentication token from cookies
         const authToken = document.cookie.split('; ').find(c => c.startsWith('HLAuthToken='))?.split('=')[1];
-        if (authToken) {
+        // Deprecated: Only proceed if we found a valid authToken
+        //if (authToken) {
           // Prepare the data to send to the server
           const userData = {
-            authToken: authToken,
+            authToken: authToken || null, // Pass null if authToken is not found
             priceId: priceId2, // Use priceId2 from URL parameter or default
             locale: document.documentElement.lang || "en",
             currentUrl: window.location.href // Add current URL
@@ -139,7 +141,7 @@
             EnableButton(button, textButton2);
             EnableButton(button1, textButton1);
           });
-        }
+        //} // End of authToken check
       });
       // Register Plus Opt-Out
       if (document.referrer == 'https://checkout.stripe.com/') {
